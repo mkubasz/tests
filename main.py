@@ -9,19 +9,27 @@ def go_to_main_site():
     driver.get("https://hejto.pl")
 
 
-go_to_main_site()
-driver.maximize_window()
-
-
-# First part - login
-
-_login = "pan_tuman"
-_password = "jestembotem"
-
-
 def accept_cookies():
     accept_cookies_button = driver.find_element(By.XPATH, '//*[contains(text(), "Zgadzam się")]')
     accept_cookies_button.click()
+
+
+go_to_main_site()
+driver.implicitly_wait(3)
+
+
+try:
+    accept_cookies()
+except:
+    print('There is no such thing as cookies...')
+finally:
+    driver.maximize_window()
+
+
+# First part - testing login
+
+_login = "pan_tuman"
+_password = "jestembotem"
 
 
 def log_in(login=None, password=None):
@@ -34,12 +42,12 @@ def log_in(login=None, password=None):
     password_input.send_keys(password)
     let_me_in_button = driver.find_element(By.XPATH, '//button[text()="Zaloguj się"]')
     let_me_in_button.click()
+    try:
+        driver.find_element(By.ID, 'status')
+        print("Login failed :(")
+    except:
+        print("Login success!")
 
-
-try:
-    accept_cookies()
-except:
-    print('There is no such thing as cookies...')
 
 log_in(_login, _password)
 
@@ -53,6 +61,7 @@ def check_notifications():
         driver.find_element(By.XPATH, '//div[@class="w-6 h-6 absolute -top-2 -right-1 rounded-full '
                                       'text-common-white bg-primary-main text-xs flex justify-center '
                                       'items-center"]')
+        print("Yeah, you've got some notification!")
     except:
         print("There is no notifications at all :(")
         return
@@ -75,6 +84,13 @@ my_searched_data = "test"
 def search_something(text=None):
     search_bar = driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Szukaj"]')
     search_bar.send_keys(text, Keys.ENTER)
+    try:
+        driver.find_element(By.XPATH, '//span[text()="Brak wpisów"]')
+        print(f"There is no any {text} here")
+    except:
+        print(f"Sir! We found {text}!")
 
 
 search_something(my_searched_data)
+
+driver.quit()
