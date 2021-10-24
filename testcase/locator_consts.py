@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
+from enum import Enum
 
-
-class MainPageLocators(object):
+class MainPageLocators(Enum):
     LOGIN_BUTTON = (By.CSS_SELECTOR, 'button[aria-label="Zaloguj się"]')
     LOGIN_INPUT = (By.CSS_SELECTOR, 'input[name="username"]')
     PASSWORD_INPUT = (By.CSS_SELECTOR, 'input[name="password"]')
